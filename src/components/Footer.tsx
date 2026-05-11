@@ -86,6 +86,8 @@ export default function Footer() {
                 { href: '/shop', label: 'Shop' },
                 { href: '/craft', label: 'Our Craft' },
                 { href: '/contact', label: 'Contact' },
+                { href: '/faq', label: 'FAQ & Returns' },
+                { href: '/orders', label: 'Orders' },
                 { href: '/wishlist', label: 'Wishlist' },
               ].map((link) => (
                 <Link key={link.href} href={link.href} className="text-sm text-ivory/40 hover:text-gold transition-colors">{link.label}</Link>

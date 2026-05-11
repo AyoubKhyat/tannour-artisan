@@ -10,6 +10,7 @@ import Marquee from '@/components/Marquee';
 import TornDivider from '@/components/TornDivider';
 import { HeroSkeleton } from '@/components/SkeletonLoader';
 import ScrollCounter from '@/components/ScrollCounter';
+import MagneticButton from '@/components/MagneticButton';
 
 const HeroScene = dynamic(() => import('@/components/HeroScene'), { ssr: false });
 const ease = [0.22, 1, 0.36, 1] as const;
@@ -91,10 +92,12 @@ export default function HomePage() {
               </motion.p>
             </div>
             <motion.div initial={{ opacity: 0, y: 20, scale: 0.9 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ delay: 1.8, duration: 0.8, ease }} className="mt-10">
-              <Link href="/shop" className="group inline-flex items-center gap-3 px-10 py-4 border border-accent/30 text-accent text-xs tracking-[0.3em] uppercase hover:bg-accent hover:text-white transition-all duration-500">
-                <span>Explore Collection</span>
-                <motion.span initial={{ x: 0 }} animate={{ x: [0, 5, 0] }} transition={{ delay: 2.5, duration: 1.5, repeat: Infinity, repeatDelay: 3 }} className="inline-block" aria-hidden="true">→</motion.span>
-              </Link>
+              <MagneticButton strength={0.25}>
+                <Link href="/shop" className="group inline-flex items-center gap-3 px-10 py-4 border border-accent/30 text-accent text-xs tracking-[0.3em] uppercase hover:bg-accent hover:text-white transition-all duration-500">
+                  <span>Explore Collection</span>
+                  <motion.span initial={{ x: 0 }} animate={{ x: [0, 5, 0] }} transition={{ delay: 2.5, duration: 1.5, repeat: Infinity, repeatDelay: 3 }} className="inline-block" aria-hidden="true">→</motion.span>
+                </Link>
+              </MagneticButton>
             </motion.div>
           </motion.div>
         </div>
@@ -120,9 +123,11 @@ export default function HomePage() {
             ))}
           </div>
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.4, duration: 0.6, ease }} viewport={{ once: true }} className="text-center mt-16">
-            <Link href="/shop" className="group inline-flex items-center gap-3 px-10 py-4 border border-accent/20 text-accent/70 text-xs tracking-[0.3em] uppercase hover:bg-accent hover:text-white transition-all duration-500">
-              <span>View All Products</span><span className="group-hover:translate-x-1 transition-transform" aria-hidden="true">→</span>
-            </Link>
+            <MagneticButton strength={0.2}>
+              <Link href="/shop" className="group inline-flex items-center gap-3 px-10 py-4 border border-accent/20 text-accent/70 text-xs tracking-[0.3em] uppercase hover:bg-accent hover:text-white transition-all duration-500">
+                <span>View All Products</span><span className="group-hover:translate-x-1 transition-transform" aria-hidden="true">→</span>
+              </Link>
+            </MagneticButton>
           </motion.div>
         </div>
       </section>
@@ -163,9 +168,11 @@ export default function HomePage() {
                 <motion.p key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 + i * 0.15, duration: 0.7, ease }} viewport={{ once: true }} className="text-secondary leading-relaxed mb-6">{text}</motion.p>
               ))}
               <motion.div initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.7, duration: 0.6, ease }} viewport={{ once: true }}>
-                <Link href="/craft" className="group inline-flex items-center gap-3 px-8 py-3 border border-accent/20 text-accent/70 text-xs tracking-[0.3em] uppercase hover:bg-accent hover:text-white transition-all duration-500">
-                  <span>Discover Our Craft</span><span className="group-hover:translate-x-1 transition-transform" aria-hidden="true">→</span>
-                </Link>
+                <MagneticButton strength={0.2}>
+                  <Link href="/craft" className="group inline-flex items-center gap-3 px-8 py-3 border border-accent/20 text-accent/70 text-xs tracking-[0.3em] uppercase hover:bg-accent hover:text-white transition-all duration-500">
+                    <span>Discover Our Craft</span><span className="group-hover:translate-x-1 transition-transform" aria-hidden="true">→</span>
+                  </Link>
+                </MagneticButton>
               </motion.div>
             </div>
           </div>

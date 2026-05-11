@@ -9,6 +9,7 @@ import {
   validateField, validateAll,
   formatCardNumber, formatExpiry, mockProcessOrder,
 } from '@/lib/checkout';
+import { saveOrder } from '@/lib/orders';
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -74,6 +75,7 @@ export default function CheckoutPage() {
     setStage('processing');
     const result = await mockProcessOrder();
     setOrderId(result.orderId);
+    saveOrder(result.orderId, items, totalPrice);
     clearCart();
     setStage('confirmed');
   };

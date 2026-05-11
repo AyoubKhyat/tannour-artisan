@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, Suspense } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useParams } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
@@ -8,9 +8,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { getProduct } from '@/lib/products';
 import { useCart } from '@/lib/cart';
 import { useToast } from '@/lib/toast';
+import { useRecentlyViewed } from '@/lib/recentlyViewed';
+import { getAverageRating, getReviewCount } from '@/lib/reviews';
 import StitchBorder from '@/components/StitchBorder';
+import StarRating from '@/components/StarRating';
 import WishlistButton from '@/components/WishlistButton';
 import RelatedProducts from '@/components/RelatedProducts';
+import ReviewSection from '@/components/ReviewSection';
+import RecentlyViewed from '@/components/RecentlyViewed';
 import { ProductViewerSkeleton } from '@/components/SkeletonLoader';
 
 const ProductViewer = dynamic(() => import('@/components/ProductViewer'), { ssr: false });
@@ -76,10 +81,15 @@ export default function ProductPage() {
   const product = getProduct(params.id as string);
   const { addItem } = useCart();
   const { show } = useToast();
+  const { add: addViewed } = useRecentlyViewed();
   const [selectedColor, setSelectedColor] = useState(0);
   const [selectedSize, setSelectedSize] = useState(0);
   const [sizeGuideOpen, setSizeGuideOpen] = useState(false);
   const [addedAnimation, setAddedAnimation] = useState(false);
+
+  useEffect(() => {
+    if (product) addViewed(product.id);
+  }, [product, addViewed]);
 
   if (!product) {
     return (
@@ -189,6 +199,10 @@ export default function ProductPage() {
                 <p className="text-accent font-serif text-3xl mt-6">
                   {product.price.toLocaleString()} <span className="text-lg text-accent/50">MAD</span>
                 </p>
+                <div className="flex items-center gap-2 mt-2">
+                  <StarRating rating={getAverageRating(product.id)} size={14} className="text-accent" />
+                  <span className="text-faint text-xs">({getReviewCount(product.id)})</span>
+                </div>
               </motion.div>
 
               <motion.p
@@ -313,7 +327,9 @@ export default function ProductPage() {
         </div>
       </section>
 
+      <ReviewSection productId={product.id} />
       <RelatedProducts productId={product.id} />
+      <RecentlyViewed excludeId={product.id} />
     </>
   );
 }

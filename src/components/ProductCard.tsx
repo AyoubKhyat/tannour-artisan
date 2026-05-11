@@ -7,7 +7,9 @@ import { Product } from '@/lib/products';
 import { useCart } from '@/lib/cart';
 import { useToast } from '@/lib/toast';
 import { useQuickView } from '@/lib/quickview';
+import { getAverageRating, getReviewCount } from '@/lib/reviews';
 import WishlistButton from '@/components/WishlistButton';
+import StarRating from '@/components/StarRating';
 
 export default function ProductCard({ product, index = 0 }: { product: Product; index?: number }) {
   const cardRef = useRef<HTMLDivElement>(null);
@@ -74,7 +76,11 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
               <h3 className="font-serif text-lg text-primary group-hover:text-accent transition-colors">{product.nameFr}</h3>
               <p className="text-sm text-faint mt-0.5 font-sans" dir="rtl">{product.nameDarija}</p>
             </Link>
-            <div className="flex items-center justify-between mt-4">
+            <div className="flex items-center gap-1.5 mt-2">
+              <StarRating rating={getAverageRating(product.id)} size={11} className="text-accent" />
+              <span className="text-faint text-[10px]">({getReviewCount(product.id)})</span>
+            </div>
+            <div className="flex items-center justify-between mt-3">
               <span className="text-accent font-serif text-lg">{product.price.toLocaleString()} <span className="text-xs opacity-50">MAD</span></span>
               <button onClick={handleAdd} className="px-4 py-2 text-xs tracking-[0.15em] uppercase border border-subtle-strong text-accent/70 hover:bg-accent hover:text-white transition-all duration-300" aria-label={`Add ${product.nameFr} to bag`}>Add</button>
             </div>

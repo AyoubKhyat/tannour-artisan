@@ -18,6 +18,7 @@ const BackToTop = dynamic(() => import('@/components/BackToTop'), { ssr: false }
 const NavigationProgress = dynamic(() => import('@/components/NavigationProgress'), { ssr: false });
 const ScrollProgress = dynamic(() => import('@/components/ScrollProgress'), { ssr: false });
 const CookieConsent = dynamic(() => import('@/components/CookieConsent'), { ssr: false });
+const AnnouncementBar = dynamic(() => import('@/components/AnnouncementBar'), { ssr: false });
 const Footer = dynamic(() => import('@/components/Footer'), { ssr: false });
 
 export default function ClientLayout({ children }: { children: ReactNode }) {
@@ -27,6 +28,7 @@ export default function ClientLayout({ children }: { children: ReactNode }) {
         <WishlistProvider>
           <ToastProvider>
             <QuickViewProvider>
+              <AnnouncementBar />
               <NavigationProgress />
               <ScrollProgress />
               <CustomCursor />
