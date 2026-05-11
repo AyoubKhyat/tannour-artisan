@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useMemo, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useMemo, useCallback, useRef } from 'react';
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { products, ProductCategory } from '@/lib/products';
 import ProductCard from '@/components/ProductCard';
 import ShopFilters from '@/components/ShopFilters';
@@ -59,11 +59,29 @@ export default function ShopPage() {
 
   const hasFilters = searchQuery.trim() !== '' || priceRange[0] > MIN_PRICE || priceRange[1] < MAX_PRICE || sortBy !== 'default';
 
+  const heroRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress: heroScroll } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
+  const heroTextY = useTransform(heroScroll, [0, 1], ['0%', '40%']);
+  const heroOpacity = useTransform(heroScroll, [0, 0.6], [1, 0]);
+
   return (
     <>
-      <section className="pt-32 pb-12 px-6 overflow-hidden">
-        <div className="max-w-7xl mx-auto">
-          {/* Header */}
+      {/* Hero */}
+      <section ref={heroRef} className="relative pt-32 pb-20 px-6 overflow-hidden bg-surface">
+        <div className="absolute inset-0 leather-grain" />
+        <div className="absolute inset-0 opacity-[0.015] pointer-events-none" aria-hidden="true">
+          <div className="absolute inset-0" style={{ backgroundImage: 'repeating-linear-gradient(90deg, var(--accent) 0, var(--accent) 1px, transparent 0, transparent 50%)', backgroundSize: '60px 60px' }} />
+        </div>
+
+        {/* Corner frames */}
+        <div className="absolute inset-0 z-0 pointer-events-none hidden md:block" aria-hidden="true">
+          <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ delay: 0.6, duration: 1, ease }} className="absolute top-24 left-10 right-10 h-px bg-accent/8 origin-left" />
+          <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ delay: 0.8, duration: 1, ease }} className="absolute bottom-8 left-10 right-10 h-px bg-accent/8 origin-right" />
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2, duration: 0.6 }} className="absolute top-[92px] left-8 w-3 h-3 border-t border-l border-accent/15" />
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.3, duration: 0.6 }} className="absolute top-[92px] right-8 w-3 h-3 border-t border-r border-accent/15" />
+        </div>
+
+        <motion.div style={{ y: heroTextY, opacity: heroOpacity }} className="relative z-10 max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <motion.div
               initial={{ scaleX: 0 }}
@@ -81,10 +99,11 @@ export default function ShopPage() {
             </motion.p>
             <div className="overflow-hidden">
               <motion.h1
-                initial={{ y: '100%' }}
-                animate={{ y: '0%' }}
-                transition={{ delay: 0.25, duration: 0.9, ease }}
-                className="font-serif text-5xl md:text-6xl text-primary tracking-wider"
+                initial={{ y: '120%', rotateX: 30 }}
+                animate={{ y: '0%', rotateX: 0 }}
+                transition={{ delay: 0.25, duration: 1.1, ease }}
+                className="font-serif text-5xl md:text-7xl text-primary tracking-wider"
+                style={{ transformOrigin: 'bottom' }}
               >
                 The Shop
               </motion.h1>
@@ -93,9 +112,22 @@ export default function ShopPage() {
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
               transition={{ delay: 0.6, duration: 0.8, ease }}
-              className="w-24 h-px bg-gradient-to-r from-transparent via-accent/20 to-transparent mx-auto mt-5"
+              className="w-32 h-px bg-gradient-to-r from-transparent via-accent/20 to-transparent mx-auto mt-5 mb-5"
             />
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7, duration: 0.6, ease }}
+              className="text-secondary text-sm tracking-[0.2em] uppercase font-sans"
+            >
+              Handcrafted Moroccan Leather Goods
+            </motion.p>
           </div>
+        </motion.div>
+      </section>
+
+      <section className="pb-12 px-6 overflow-hidden">
+        <div className="max-w-7xl mx-auto">
 
           {/* Category Filters */}
           <motion.div

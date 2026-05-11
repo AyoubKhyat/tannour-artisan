@@ -79,6 +79,25 @@ export default function CraftPage() {
       {/* Hero with parallax text */}
       <section ref={heroRef} className="relative pt-32 pb-24 px-6 overflow-hidden bg-surface">
         <div className="absolute inset-0 leather-grain" />
+        <div className="absolute inset-0 opacity-[0.015] pointer-events-none" aria-hidden="true">
+          <div className="absolute inset-0" style={{ backgroundImage: 'repeating-linear-gradient(45deg, var(--accent) 0, var(--accent) 1px, transparent 0, transparent 50%)', backgroundSize: '40px 40px' }} />
+        </div>
+
+        {/* Side text */}
+        <motion.div initial={{ opacity: 0, x: -15 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 1.4, duration: 0.8 }} className="absolute left-6 top-1/2 -translate-y-1/2 z-10 hidden lg:block" aria-hidden="true">
+          <p className="text-faint text-[10px] tracking-[0.4em] uppercase font-sans [writing-mode:vertical-lr] rotate-180">Since · the · 14th · Century</p>
+        </motion.div>
+        <motion.div initial={{ opacity: 0, x: 15 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 1.6, duration: 0.8 }} className="absolute right-6 top-1/2 -translate-y-1/2 z-10 hidden lg:block" aria-hidden="true">
+          <p className="text-faint text-[10px] tracking-[0.4em] uppercase font-sans [writing-mode:vertical-lr]">Vegetable · Tanned · Leather</p>
+        </motion.div>
+
+        {/* Corner accents */}
+        <div className="absolute inset-0 z-0 pointer-events-none hidden md:block" aria-hidden="true">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2, duration: 0.6 }} className="absolute top-24 left-8 w-4 h-4 border-t border-l border-accent/15" />
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.3, duration: 0.6 }} className="absolute top-24 right-8 w-4 h-4 border-t border-r border-accent/15" />
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.4, duration: 0.6 }} className="absolute bottom-8 left-8 w-4 h-4 border-b border-l border-accent/15" />
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5, duration: 0.6 }} className="absolute bottom-8 right-8 w-4 h-4 border-b border-r border-accent/15" />
+        </div>
 
         <motion.div style={{ y: heroTextY, opacity: heroOpacity }} className="relative z-10 max-w-4xl mx-auto text-center">
           <motion.div
@@ -112,7 +131,7 @@ export default function CraftPage() {
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
             transition={{ delay: 0.9, duration: 0.8, ease }}
-            className="w-24 h-px bg-gradient-to-r from-transparent via-accent/20 to-transparent mx-auto mt-6 mb-8"
+            className="w-32 h-px bg-gradient-to-r from-transparent via-accent/20 to-transparent mx-auto mt-6 mb-8"
           />
 
           <motion.p

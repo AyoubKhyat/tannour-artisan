@@ -7,7 +7,10 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getProduct } from '@/lib/products';
 import { useCart } from '@/lib/cart';
+import { useToast } from '@/lib/toast';
 import StitchBorder from '@/components/StitchBorder';
+import WishlistButton from '@/components/WishlistButton';
+import RelatedProducts from '@/components/RelatedProducts';
 import { ProductViewerSkeleton } from '@/components/SkeletonLoader';
 
 const ProductViewer = dynamic(() => import('@/components/ProductViewer'), { ssr: false });
@@ -72,6 +75,7 @@ export default function ProductPage() {
   const params = useParams();
   const product = getProduct(params.id as string);
   const { addItem } = useCart();
+  const { show } = useToast();
   const [selectedColor, setSelectedColor] = useState(0);
   const [selectedSize, setSelectedSize] = useState(0);
   const [sizeGuideOpen, setSizeGuideOpen] = useState(false);
@@ -90,6 +94,7 @@ export default function ProductPage() {
 
   const handleAddToCart = () => {
     addItem(product, product.colors[selectedColor].name, product.sizes[selectedSize]);
+    show(`${product.nameFr} added to bag`);
     setAddedAnimation(true);
     setTimeout(() => setAddedAnimation(false), 1500);
   };
@@ -262,12 +267,13 @@ export default function ProductPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 1.05, duration: 0.6, ease }}
+                className="flex gap-3 mt-8"
               >
                 <motion.button
                   onClick={handleAddToCart}
                   whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.97 }}
-                  className={`w-full mt-8 py-5 text-sm tracking-[0.3em] uppercase transition-all duration-500 ${
+                  className={`flex-1 py-5 text-sm tracking-[0.3em] uppercase transition-all duration-500 ${
                     addedAnimation
                       ? 'bg-green-700 text-white border border-green-600'
                       : 'bg-accent text-white hover:bg-accent/90'
@@ -275,6 +281,12 @@ export default function ProductPage() {
                 >
                   {addedAnimation ? '✓ Added to Bag' : 'Add to Bag'}
                 </motion.button>
+                <WishlistButton
+                  productId={product.id}
+                  productName={product.nameFr}
+                  size="md"
+                  className="w-14 border border-subtle hover:border-accent transition-colors"
+                />
               </motion.div>
 
               <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 text-center">
@@ -300,6 +312,8 @@ export default function ProductPage() {
           </div>
         </div>
       </section>
+
+      <RelatedProducts productId={product.id} />
     </>
   );
 }

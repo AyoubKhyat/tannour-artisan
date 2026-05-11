@@ -3,12 +3,14 @@
 import Link from 'next/link';
 import { useCart } from '@/lib/cart';
 import { useTheme } from '@/lib/theme';
+import { useWishlist } from '@/lib/wishlist';
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Navbar() {
   const { totalItems, openCart } = useCart();
   const { theme, toggle } = useTheme();
+  const { count: wishlistCount } = useWishlist();
   const [mobileOpen, setMobileOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const toggleBtnRef = useRef<HTMLButtonElement>(null);
@@ -24,6 +26,7 @@ export default function Navbar() {
     { href: '/', label: 'Home' },
     { href: '/shop', label: 'Shop' },
     { href: '/craft', label: 'Our Craft' },
+    { href: '/contact', label: 'Contact' },
   ];
 
   return (
@@ -87,6 +90,26 @@ export default function Navbar() {
               )}
             </AnimatePresence>
           </button>
+
+          <Link
+            href="/wishlist"
+            className="relative text-secondary hover:text-accent transition-colors"
+            aria-label={`Wishlist${wishlistCount > 0 ? `, ${wishlistCount} item${wishlistCount > 1 ? 's' : ''}` : ''}`}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+              <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
+            </svg>
+            {wishlistCount > 0 && (
+              <motion.span
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                className="absolute -top-2 -right-2 w-5 h-5 bg-accent text-white text-xs font-sans font-bold rounded-full flex items-center justify-center"
+                aria-hidden="true"
+              >
+                {wishlistCount}
+              </motion.span>
+            )}
+          </Link>
 
           <button
             onClick={openCart}

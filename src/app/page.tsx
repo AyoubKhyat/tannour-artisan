@@ -9,6 +9,7 @@ import ProductCard from '@/components/ProductCard';
 import Marquee from '@/components/Marquee';
 import TornDivider from '@/components/TornDivider';
 import { HeroSkeleton } from '@/components/SkeletonLoader';
+import ScrollCounter from '@/components/ScrollCounter';
 
 const HeroScene = dynamic(() => import('@/components/HeroScene'), { ssr: false });
 const ease = [0.22, 1, 0.36, 1] as const;
@@ -126,6 +127,9 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ═══ Heritage Numbers ═══ */}
+      <ScrollCounter />
+
       <TornDivider />
 
       {/* ═══ Craft Story ═══ */}
@@ -187,11 +191,17 @@ export default function HomePage() {
               return (
                 <motion.div key={i} className={item.span} initial={{ opacity: 0, ...initPos, scale: 0.9 }} whileInView={{ opacity: 1, x: 0, y: 0, scale: 1 }} transition={{ delay: i * 0.08, duration: 0.7, ease }} viewport={{ once: true, margin: '-30px' }}>
                   <div className={`${item.aspect} bg-surface-alt relative overflow-hidden group border border-subtle`}>
-                    <div className="absolute inset-0 flex items-center justify-center">
+                    <motion.div
+                      className="absolute inset-0 flex items-center justify-center"
+                      initial={{ scale: 1.15 }}
+                      whileInView={{ scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 1.2, delay: i * 0.05, ease }}
+                    >
                       <motion.span whileHover={{ scale: 1.3, rotate: 15 }} transition={{ type: 'spring', stiffness: 300 }} className="text-accent/10 font-serif text-6xl group-hover:text-accent/20 transition-colors duration-500">
                         {['◆', '✦', '◇', '▲', '○', '□'][i]}
                       </motion.span>
-                    </div>
+                    </motion.div>
                     <div className="absolute inset-0 bg-accent/0 group-hover:bg-accent/5 transition-colors duration-500" />
                   </div>
                 </motion.div>

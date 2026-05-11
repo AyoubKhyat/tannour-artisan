@@ -202,3 +202,11 @@ export function getProductsByCategory(category: ProductCategory): Product[] {
 export function getFeaturedProducts(): Product[] {
   return products.filter((p) => p.featured);
 }
+
+export function getRelatedProducts(productId: string, limit = 4): Product[] {
+  const product = getProduct(productId);
+  if (!product) return [];
+  const sameCategory = products.filter((p) => p.id !== productId && p.category === product.category);
+  const other = products.filter((p) => p.id !== productId && p.category !== product.category);
+  return [...sameCategory, ...other].slice(0, limit);
+}
