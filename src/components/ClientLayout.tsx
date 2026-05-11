@@ -16,6 +16,7 @@ const ToastContainer = dynamic(() => import('@/components/ToastContainer'), { ss
 const QuickViewModal = dynamic(() => import('@/components/QuickViewModal'), { ssr: false });
 const BackToTop = dynamic(() => import('@/components/BackToTop'), { ssr: false });
 const NavigationProgress = dynamic(() => import('@/components/NavigationProgress'), { ssr: false });
+const ScrollProgress = dynamic(() => import('@/components/ScrollProgress'), { ssr: false });
 const CookieConsent = dynamic(() => import('@/components/CookieConsent'), { ssr: false });
 const Footer = dynamic(() => import('@/components/Footer'), { ssr: false });
 
@@ -27,6 +28,7 @@ export default function ClientLayout({ children }: { children: ReactNode }) {
           <ToastProvider>
             <QuickViewProvider>
               <NavigationProgress />
+              <ScrollProgress />
               <CustomCursor />
               <Navbar />
               <CartDrawer />
