@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from '@/lib/cart';
+import { useI18n } from '@/lib/i18n';
 import {
   CheckoutFormData, initialFormData,
   validateField, validateAll,
@@ -39,6 +40,7 @@ function Input({ label, name, value, error, type = 'text', onChange, autoComplet
 }
 
 export default function CheckoutPage() {
+  const { t, dir } = useI18n();
   const { items, totalPrice, clearCart } = useCart();
   const [form, setForm] = useState<CheckoutFormData>(initialFormData);
   const [errors, setErrors] = useState<Partial<Record<keyof CheckoutFormData, string>>>({});
@@ -82,13 +84,13 @@ export default function CheckoutPage() {
 
   if (items.length === 0 && stage === 'form') {
     return (
-      <section className="pt-32 pb-20 px-6 min-h-screen">
+      <section dir={dir} className="pt-32 pb-20 px-6 min-h-screen">
         <div className="max-w-md mx-auto text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease }}>
             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="mx-auto text-faint" aria-hidden="true">
               <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" /><line x1="3" y1="6" x2="21" y2="6" /><path d="M16 10a4 4 0 01-8 0" />
             </svg>
-            <h1 className="font-serif text-3xl text-primary mt-6 tracking-wider">Your Bag is Empty</h1>
+            <h1 className="font-serif text-3xl text-primary mt-6 tracking-wider">{t('checkout.emptyBag')}</h1>
             <p className="text-secondary text-sm mt-3">Add some pieces before checking out.</p>
             <Link href="/shop" className="inline-block mt-8 px-10 py-4 border border-accent/30 text-accent text-xs tracking-[0.3em] uppercase hover:bg-accent hover:text-white transition-all duration-500">
               Browse Collection
@@ -100,12 +102,12 @@ export default function CheckoutPage() {
   }
 
   return (
-    <section className="pt-28 pb-20 px-6 min-h-screen">
+    <section dir={dir} className="pt-28 pb-20 px-6 min-h-screen">
       <div className="max-w-6xl mx-auto">
         <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, ease }} className="mb-8">
           <Link href="/shop" className="group inline-flex items-center gap-2 text-faint text-xs tracking-widest uppercase hover:text-accent transition-colors">
             <span className="group-hover:-translate-x-1 transition-transform" aria-hidden="true">←</span>
-            <span>Continue Shopping</span>
+            <span>{t('checkout.continueShopping')}</span>
           </Link>
         </motion.div>
 
@@ -113,7 +115,7 @@ export default function CheckoutPage() {
           <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 0.8, ease }} className="w-12 h-px bg-accent/30 mx-auto mb-6 origin-center" />
           <div className="overflow-hidden">
             <motion.h1 initial={{ y: '100%' }} animate={{ y: '0%' }} transition={{ delay: 0.2, duration: 0.9, ease }} className="font-serif text-4xl md:text-5xl text-primary tracking-wider">
-              Checkout
+              {t('checkout.title')}
             </motion.h1>
           </div>
         </div>
@@ -137,12 +139,12 @@ export default function CheckoutPage() {
                   <polyline points="20 6 9 17 4 12" />
                 </svg>
               </motion.div>
-              <h2 className="font-serif text-3xl text-primary tracking-wider mb-3">Thank You</h2>
-              <p className="text-secondary text-sm mb-2">Your order has been placed successfully.</p>
+              <h2 className="font-serif text-3xl text-primary tracking-wider mb-3">{t('checkout.thankYou')}</h2>
+              <p className="text-secondary text-sm mb-2">{t('checkout.orderPlaced')}</p>
               <p className="text-accent font-serif text-lg mb-8">Order #{orderId}</p>
               <p className="text-faint text-xs mb-8">This is a demo — no real payment was processed.</p>
               <Link href="/shop" className="inline-block px-10 py-4 border border-accent/30 text-accent text-xs tracking-[0.3em] uppercase hover:bg-accent hover:text-white transition-all duration-500">
-                Continue Shopping
+                {t('checkout.continueShopping')}
               </Link>
             </motion.div>
           ) : (
@@ -261,10 +263,10 @@ export default function CheckoutPage() {
                               transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
                               className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full"
                             />
-                            Processing...
+                            {t('checkout.processing')}
                           </span>
                         ) : (
-                          `Place Order · ${totalPrice.toLocaleString()} MAD`
+                          `${t('checkout.placeOrder')} · ${totalPrice.toLocaleString()} MAD`
                         )}
                       </button>
                     </motion.div>
@@ -279,7 +281,7 @@ export default function CheckoutPage() {
                   className="lg:col-span-2"
                 >
                   <div className="lg:sticky lg:top-28 bg-card border border-subtle p-8">
-                    <h2 className="font-serif text-xl text-primary tracking-wider mb-6">Order Summary</h2>
+                    <h2 className="font-serif text-xl text-primary tracking-wider mb-6">{t('checkout.orderSummary')}</h2>
 
                     <div className="flex flex-col gap-4 mb-6">
                       {items.map((item) => (
@@ -298,15 +300,15 @@ export default function CheckoutPage() {
 
                     <div className="border-t border-subtle pt-4 space-y-3">
                       <div className="flex justify-between text-sm">
-                        <span className="text-secondary">Subtotal</span>
+                        <span className="text-secondary">{t('cart.subtotal')}</span>
                         <span className="text-primary">{totalPrice.toLocaleString()} MAD</span>
                       </div>
                       <div className="flex justify-between text-sm">
-                        <span className="text-secondary">Shipping</span>
-                        <span className="text-accent text-xs tracking-wider uppercase">Free</span>
+                        <span className="text-secondary">{t('checkout.shipping')}</span>
+                        <span className="text-accent text-xs tracking-wider uppercase">{t('checkout.free')}</span>
                       </div>
                       <div className="border-t border-subtle pt-3 flex justify-between">
-                        <span className="text-sm text-secondary uppercase tracking-wider">Total</span>
+                        <span className="text-sm text-secondary uppercase tracking-wider">{t('checkout.total')}</span>
                         <span className="text-lg font-serif text-accent">{totalPrice.toLocaleString()} MAD</span>
                       </div>
                     </div>

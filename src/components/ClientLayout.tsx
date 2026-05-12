@@ -7,6 +7,7 @@ import { ThemeProvider } from '@/lib/theme';
 import { WishlistProvider } from '@/lib/wishlist';
 import { ToastProvider } from '@/lib/toast';
 import { QuickViewProvider } from '@/lib/quickview';
+import { I18nProvider } from '@/lib/i18n';
 import Navbar from '@/components/Navbar';
 import PageTransition from '@/components/PageTransition';
 
@@ -20,9 +21,11 @@ const ScrollProgress = dynamic(() => import('@/components/ScrollProgress'), { ss
 const CookieConsent = dynamic(() => import('@/components/CookieConsent'), { ssr: false });
 const AnnouncementBar = dynamic(() => import('@/components/AnnouncementBar'), { ssr: false });
 const Footer = dynamic(() => import('@/components/Footer'), { ssr: false });
+const SocialProof = dynamic(() => import('@/components/SocialProof'), { ssr: false });
 
 export default function ClientLayout({ children }: { children: ReactNode }) {
   return (
+    <I18nProvider>
     <ThemeProvider>
       <CartProvider>
         <WishlistProvider>
@@ -38,6 +41,7 @@ export default function ClientLayout({ children }: { children: ReactNode }) {
               <ToastContainer />
               <BackToTop />
               <CookieConsent />
+              <SocialProof />
               <PageTransition>
                 <main className="min-h-screen">{children}</main>
               </PageTransition>
@@ -47,5 +51,6 @@ export default function ClientLayout({ children }: { children: ReactNode }) {
         </WishlistProvider>
       </CartProvider>
     </ThemeProvider>
+    </I18nProvider>
   );
 }

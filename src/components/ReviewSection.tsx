@@ -3,15 +3,17 @@
 import { motion } from 'framer-motion';
 import { getReviewsForProduct, getAverageRating } from '@/lib/reviews';
 import StarRating from '@/components/StarRating';
+import { useI18n } from '@/lib/i18n';
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
 export default function ReviewSection({ productId }: { productId: string }) {
+  const { t, dir } = useI18n();
   const reviews = getReviewsForProduct(productId);
   const avg = getAverageRating(productId);
 
   return (
-    <section className="pb-20 px-6">
+    <section dir={dir} className="pb-20 px-6">
       <div className="max-w-3xl mx-auto">
         <motion.div
           initial={{ scaleX: 0 }}
@@ -27,8 +29,8 @@ export default function ReviewSection({ productId }: { productId: string }) {
           transition={{ delay: 0.1, duration: 0.5, ease }}
           className="text-center mb-10"
         >
-          <p className="text-accent/50 text-xs tracking-[0.5em] uppercase mb-3 font-sans">Feedback</p>
-          <h2 className="font-serif text-3xl text-primary tracking-wider mb-4">Customer Reviews</h2>
+          <p className="text-accent/50 text-xs tracking-[0.5em] uppercase mb-3 font-sans">{t('reviews.label')}</p>
+          <h2 className="font-serif text-3xl text-primary tracking-wider mb-4">{t('reviews.title')}</h2>
           <div className="flex items-center justify-center gap-3">
             <StarRating rating={avg} size={18} className="text-accent" />
             <span className="text-primary font-serif text-lg">{avg}</span>
@@ -51,7 +53,7 @@ export default function ReviewSection({ productId }: { productId: string }) {
                   <div className="flex items-center gap-2">
                     <p className="text-primary text-sm font-sans">{review.author}</p>
                     {review.verified && (
-                      <span className="text-accent/60 text-[10px] tracking-wider uppercase border border-accent/20 px-1.5 py-0.5">Verified</span>
+                      <span className="text-accent/60 text-[10px] tracking-wider uppercase border border-accent/20 px-1.5 py-0.5">{t('reviews.verified')}</span>
                     )}
                   </div>
                   <StarRating rating={review.rating} size={12} className="text-accent mt-1" />

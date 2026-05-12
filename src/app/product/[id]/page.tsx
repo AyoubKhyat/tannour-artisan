@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { getProduct } from '@/lib/products';
 import { useCart } from '@/lib/cart';
 import { useToast } from '@/lib/toast';
+import { useI18n } from '@/lib/i18n';
 import { useRecentlyViewed } from '@/lib/recentlyViewed';
 import { getAverageRating, getReviewCount } from '@/lib/reviews';
 import StitchBorder from '@/components/StitchBorder';
@@ -23,6 +24,7 @@ const ProductViewer = dynamic(() => import('@/components/ProductViewer'), { ssr:
 const ease = [0.22, 1, 0.36, 1] as const;
 
 function SizeGuideModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const { t } = useI18n();
   return (
     <AnimatePresence>
       {open && (
@@ -42,11 +44,11 @@ function SizeGuideModal({ open, onClose }: { open: boolean; onClose: () => void 
             className="fixed inset-4 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-[500px] bg-card border border-subtle z-[90] p-8 overflow-y-auto max-h-[80vh] shadow-2xl"
             role="dialog"
             aria-modal="true"
-            aria-label="Size guide"
+            aria-label={t('product.sizeGuide')}
           >
             <div className="flex justify-between items-center mb-8">
-              <h3 className="font-serif text-2xl text-accent">Size Guide</h3>
-              <button onClick={onClose} className="text-faint hover:text-accent transition-colors" aria-label="Close size guide">
+              <h3 className="font-serif text-2xl text-accent">{t('product.sizeGuide')}</h3>
+              <button onClick={onClose} className="text-faint hover:text-accent transition-colors" aria-label={t('common.dismiss')}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                   <path d="M18 6L6 18M6 6l12 12" />
                 </svg>
@@ -55,7 +57,7 @@ function SizeGuideModal({ open, onClose }: { open: boolean; onClose: () => void 
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-subtle">
-                  <th className="text-left py-3 text-accent/60 uppercase tracking-wider text-xs">Size</th>
+                  <th className="text-left py-3 text-accent/60 uppercase tracking-wider text-xs">{t('product.size')}</th>
                   <th className="text-left py-3 text-accent/60 uppercase tracking-wider text-xs">Width</th>
                   <th className="text-left py-3 text-accent/60 uppercase tracking-wider text-xs">Height</th>
                   <th className="text-left py-3 text-accent/60 uppercase tracking-wider text-xs">Depth</th>
@@ -81,6 +83,7 @@ export default function ProductPage() {
   const product = getProduct(params.id as string);
   const { addItem } = useCart();
   const { show } = useToast();
+  const { t, dir } = useI18n();
   const { add: addViewed } = useRecentlyViewed();
   const [selectedColor, setSelectedColor] = useState(0);
   const [selectedSize, setSelectedSize] = useState(0);
@@ -93,24 +96,49 @@ export default function ProductPage() {
 
   if (!product) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center" dir={dir}>
         <div className="text-center">
-          <h1 className="font-serif text-4xl text-primary mb-4">Product Not Found</h1>
-          <Link href="/shop" className="text-accent text-sm tracking-widest uppercase hover:underline">Back to Shop</Link>
+          <h1 className="font-serif text-4xl text-primary mb-4">{t('product.notFound')}</h1>
+          <Link href="/shop" className="text-accent text-sm tracking-widest uppercase hover:underline">{t('product.backToShop')}</Link>
         </div>
       </div>
     );
   }
 
+  const productJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.nameFr,
+    description: product.description,
+    url: `https://tannour.ma/product/${product.id}`,
+    brand: { '@type': 'Brand', name: 'TANNOUR' },
+    offers: {
+      '@type': 'Offer',
+      price: product.price,
+      priceCurrency: 'MAD',
+      availability: 'https://schema.org/InStock',
+      seller: { '@type': 'Organization', name: 'TANNOUR' },
+    },
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: getAverageRating(product.id).toFixed(1),
+      reviewCount: getReviewCount(product.id),
+    },
+  };
+
   const handleAddToCart = () => {
     addItem(product, product.colors[selectedColor].name, product.sizes[selectedSize]);
-    show(`${product.nameFr} added to bag`);
+    show(`${product.nameFr} ${t('product.addedToBag')}`);
     setAddedAnimation(true);
     setTimeout(() => setAddedAnimation(false), 1500);
   };
 
   return (
-    <>
+    <div dir={dir}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+      />
       <SizeGuideModal open={sizeGuideOpen} onClose={() => setSizeGuideOpen(false)} />
 
       <section className="pt-28 pb-20 px-6 overflow-hidden">
@@ -123,7 +151,7 @@ export default function ProductPage() {
           >
             <Link href="/shop" className="group inline-flex items-center gap-2 text-faint text-xs tracking-widest uppercase hover:text-accent transition-colors">
               <span className="group-hover:-translate-x-1 transition-transform" aria-hidden="true">←</span>
-              <span>Back to Shop</span>
+              <span>{t('product.backToShop')}</span>
             </Link>
           </motion.div>
 
@@ -148,7 +176,7 @@ export default function ProductPage() {
                 transition={{ delay: 1.2, duration: 0.5 }}
                 className="text-center text-faint text-xs mt-4 tracking-wider"
               >
-                Drag to rotate · 360° View
+                {t('product.dragToRotate')}
               </motion.p>
             </motion.div>
 
@@ -224,7 +252,7 @@ export default function ProductPage() {
                 <div className="absolute inset-0 p-8 flex flex-col justify-center">
                   <div className="mb-6">
                     <p className="text-xs text-faint tracking-widest uppercase mb-3">
-                      Leather: {product.colors[selectedColor].name}
+                      {t('product.leather')}: {product.colors[selectedColor].name}
                     </p>
                     <div className="flex gap-3">
                       {product.colors.map((color, i) => (
@@ -247,12 +275,12 @@ export default function ProductPage() {
 
                   <div>
                     <div className="flex items-center justify-between mb-3">
-                      <p className="text-xs text-faint tracking-widest uppercase">Size</p>
+                      <p className="text-xs text-faint tracking-widest uppercase">{t('product.size')}</p>
                       <button
                         onClick={() => setSizeGuideOpen(true)}
                         className="text-xs text-accent/50 underline hover:text-accent transition-colors"
                       >
-                        Size Guide
+                        {t('product.sizeGuide')}
                       </button>
                     </div>
                     <div className="flex gap-2 flex-wrap">
@@ -293,7 +321,7 @@ export default function ProductPage() {
                       : 'bg-accent text-white hover:bg-accent/90'
                   }`}
                 >
-                  {addedAnimation ? '✓ Added to Bag' : 'Add to Bag'}
+                  {addedAnimation ? t('product.addedToBag') : t('product.addToBag')}
                 </motion.button>
                 <WishlistButton
                   productId={product.id}
@@ -305,12 +333,12 @@ export default function ProductPage() {
 
               <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 text-center">
                 {[
-                  { label: 'Handcrafted', sub: 'By artisans' },
-                  { label: 'Vegetable-Tanned', sub: 'Natural process' },
-                  { label: 'Free Shipping', sub: 'Morocco-wide' },
+                  { label: t('product.handcrafted'), sub: t('product.byArtisans') },
+                  { label: t('product.vegTanned'), sub: t('product.naturalProcess') },
+                  { label: t('product.freeShipping'), sub: t('product.moroccoWide') },
                 ].map((item, i) => (
                   <motion.div
-                    key={item.label}
+                    key={i}
                     initial={{ opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 1.2 + i * 0.1, duration: 0.5, ease }}
@@ -330,6 +358,6 @@ export default function ProductPage() {
       <ReviewSection productId={product.id} />
       <RelatedProducts productId={product.id} />
       <RecentlyViewed excludeId={product.id} />
-    </>
+    </div>
   );
 }

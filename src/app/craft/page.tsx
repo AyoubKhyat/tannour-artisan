@@ -4,6 +4,7 @@ import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import TornDivider from '@/components/TornDivider';
 import Marquee from '@/components/Marquee';
+import { useI18n } from '@/lib/i18n';
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -69,13 +70,14 @@ function ParallaxSection({ children, className = '' }: { children: React.ReactNo
 }
 
 export default function CraftPage() {
+  const { t, dir } = useI18n();
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress: heroScroll } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
   const heroTextY = useTransform(heroScroll, [0, 1], ['0%', '30%']);
   const heroOpacity = useTransform(heroScroll, [0, 0.5], [1, 0]);
 
   return (
-    <>
+    <div dir={dir}>
       {/* Hero with parallax text */}
       <section ref={heroRef} className="relative pt-32 pb-24 px-6 overflow-hidden bg-surface">
         <div className="absolute inset-0 leather-grain" />
@@ -112,7 +114,7 @@ export default function CraftPage() {
             transition={{ delay: 0.2, duration: 0.8, ease }}
             className="text-accent/50 text-xs tracking-[0.5em] uppercase mb-6 font-sans"
           >
-            Our Heritage
+            {t('craft.label')}
           </motion.p>
 
           <div className="overflow-hidden">
@@ -123,7 +125,7 @@ export default function CraftPage() {
               className="font-serif text-3xl sm:text-5xl md:text-7xl text-primary tracking-wider"
               style={{ transformOrigin: 'bottom' }}
             >
-              The Art of the Tannery
+              {t('craft.title')}
             </motion.h1>
           </div>
 
@@ -140,9 +142,7 @@ export default function CraftPage() {
             transition={{ delay: 0.7, duration: 0.8, ease }}
             className="text-secondary leading-relaxed max-w-2xl mx-auto"
           >
-            Seven centuries of unbroken tradition. In the ancient tanneries of Marrakesh,
-            where the air carries the weight of history and the stone vats hold memories
-            of ten thousand hides, our artisans transform raw material into living art.
+            {t('craft.desc')}
           </motion.p>
         </motion.div>
       </section>
@@ -333,6 +333,6 @@ export default function CraftPage() {
       </section>
 
       <Marquee />
-    </>
+    </div>
   );
 }

@@ -4,13 +4,16 @@ import Link from 'next/link';
 import { useCart } from '@/lib/cart';
 import { useTheme } from '@/lib/theme';
 import { useWishlist } from '@/lib/wishlist';
+import { useI18n } from '@/lib/i18n';
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 export default function Navbar() {
   const { totalItems, openCart } = useCart();
   const { theme, toggle } = useTheme();
   const { count: wishlistCount } = useWishlist();
+  const { t, dir } = useI18n();
   const [mobileOpen, setMobileOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const toggleBtnRef = useRef<HTMLButtonElement>(null);
@@ -23,14 +26,14 @@ export default function Navbar() {
   }, [mobileOpen]);
 
   const links = [
-    { href: '/', label: 'Home' },
-    { href: '/shop', label: 'Shop' },
-    { href: '/craft', label: 'Our Craft' },
-    { href: '/contact', label: 'Contact' },
+    { href: '/', label: t('nav.home') },
+    { href: '/shop', label: t('nav.shop') },
+    { href: '/craft', label: t('nav.craft') },
+    { href: '/contact', label: t('nav.contact') },
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b border-subtle" style={{ backgroundColor: 'var(--nav-bg)' }} aria-label="Main navigation">
+    <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b border-subtle" style={{ backgroundColor: 'var(--nav-bg)' }} aria-label="Main navigation" dir={dir}>
       <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
         <Link href="/" className="font-serif text-2xl tracking-[0.3em] text-accent uppercase">
           Tannour
@@ -49,10 +52,12 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center gap-5">
+          <LanguageSwitcher />
+
           <button
             onClick={toggle}
             className="relative w-9 h-9 flex items-center justify-center text-secondary hover:text-accent transition-colors"
-            aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+            aria-label={t('nav.switchTheme', { mode: theme === 'light' ? 'dark' : 'light' })}
           >
             <AnimatePresence mode="wait">
               {theme === 'light' ? (
@@ -94,7 +99,7 @@ export default function Navbar() {
           <Link
             href="/wishlist"
             className="relative text-secondary hover:text-accent transition-colors"
-            aria-label={`Wishlist${wishlistCount > 0 ? `, ${wishlistCount} item${wishlistCount > 1 ? 's' : ''}` : ''}`}
+            aria-label={`${t('nav.wishlist')}${wishlistCount > 0 ? `, ${wishlistCount}` : ''}`}
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
               <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
@@ -114,7 +119,7 @@ export default function Navbar() {
           <button
             onClick={openCart}
             className="relative text-secondary hover:text-accent transition-colors"
-            aria-label={`Shopping bag${totalItems > 0 ? `, ${totalItems} item${totalItems > 1 ? 's' : ''}` : ''}`}
+            aria-label={`${t('nav.bag')}${totalItems > 0 ? `, ${totalItems}` : ''}`}
           >
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
               <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
@@ -137,7 +142,7 @@ export default function Navbar() {
             ref={toggleBtnRef}
             className="md:hidden text-secondary"
             onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+            aria-label={mobileOpen ? t('nav.closeMenu') : t('nav.openMenu')}
             aria-expanded={mobileOpen}
           >
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">

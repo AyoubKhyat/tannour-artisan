@@ -2,9 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useI18n } from '@/lib/i18n';
 
 export default function BackToTop() {
   const [visible, setVisible] = useState(false);
+  const { t } = useI18n();
 
   useEffect(() => {
     const onScroll = () => setVisible(window.scrollY > 500);
@@ -22,7 +24,7 @@ export default function BackToTop() {
           transition={{ type: 'spring', damping: 20, stiffness: 300 }}
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           className="fixed bottom-6 left-6 z-[60] w-11 h-11 bg-card border border-subtle shadow-lg flex items-center justify-center text-secondary hover:text-accent hover:border-accent transition-colors group"
-          aria-label="Back to top"
+          aria-label={t('common.backToTop')}
         >
           <motion.svg
             width="16"

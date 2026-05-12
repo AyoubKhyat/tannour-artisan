@@ -56,6 +56,32 @@ export const metadata: Metadata = {
   },
 };
 
+const organizationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'TANNOUR',
+  url: 'https://tannour.ma',
+  logo: 'https://tannour.ma/logo.png',
+  description: 'Luxury handcrafted leather goods from the ancient tanneries of Marrakesh.',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'Derb Dabachi, Medina',
+    addressLocality: 'Marrakesh',
+    postalCode: '40000',
+    addressCountry: 'MA',
+  },
+  contactPoint: {
+    '@type': 'ContactPoint',
+    telephone: '+212-524-000-000',
+    email: 'contact@tannour.ma',
+    contactType: 'customer service',
+  },
+  sameAs: [
+    'https://instagram.com/tannour',
+    'https://facebook.com/tannour',
+  ],
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -63,6 +89,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
+      </head>
       <body className={`${cormorant.variable} ${inter.variable} antialiased`}>
         <ClientLayout>{children}</ClientLayout>
       </body>

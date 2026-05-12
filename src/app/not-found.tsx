@@ -2,12 +2,15 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { useI18n } from '@/lib/i18n';
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
 export default function NotFound() {
+  const { t, dir } = useI18n();
+
   return (
-    <section className="min-h-screen flex items-center justify-center px-6 relative overflow-hidden bg-surface">
+    <section className="min-h-screen flex items-center justify-center px-6 relative overflow-hidden bg-surface" dir={dir}>
       <div className="absolute inset-0 leather-grain" />
       <div className="absolute inset-0 opacity-[0.015] pointer-events-none" aria-hidden="true">
         <div
@@ -62,7 +65,7 @@ export default function NotFound() {
           transition={{ delay: 0.5, duration: 0.7, ease }}
           className="text-accent/50 text-xs tracking-[0.5em] uppercase mb-4 font-sans"
         >
-          Lost in the Medina
+          {t('notFound.label')}
         </motion.p>
 
         <div className="overflow-hidden">
@@ -73,7 +76,7 @@ export default function NotFound() {
             className="font-serif text-3xl md:text-4xl text-primary tracking-wider"
             style={{ transformOrigin: 'bottom' }}
           >
-            Page Not Found
+            {t('notFound.title')}
           </motion.h1>
         </div>
 
@@ -83,7 +86,7 @@ export default function NotFound() {
           transition={{ delay: 0.9, duration: 0.6, ease }}
           className="text-secondary text-sm mt-4 leading-relaxed"
         >
-          The path you followed has vanished into the winding streets. Let us guide you back.
+          {t('notFound.desc')}
         </motion.p>
 
         <motion.div
@@ -97,13 +100,13 @@ export default function NotFound() {
             className="group inline-flex items-center gap-3 px-8 py-4 bg-accent text-white text-xs tracking-[0.3em] uppercase hover:bg-accent/90 transition-colors"
           >
             <span className="group-hover:-translate-x-1 transition-transform" aria-hidden="true">←</span>
-            <span>Back Home</span>
+            <span>{t('notFound.home')}</span>
           </Link>
           <Link
             href="/shop"
             className="inline-flex items-center gap-3 px-8 py-4 border border-accent/30 text-accent text-xs tracking-[0.3em] uppercase hover:bg-accent hover:text-white transition-all duration-500"
           >
-            Browse Shop
+            {t('notFound.shop')}
           </Link>
         </motion.div>
       </div>

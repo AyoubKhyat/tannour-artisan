@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { getOrders, Order } from '@/lib/orders';
+import { useI18n } from '@/lib/i18n';
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -14,6 +15,7 @@ const statusColor: Record<string, string> = {
 };
 
 export default function OrdersPage() {
+  const { t, dir } = useI18n();
   const [orders, setOrders] = useState<Order[]>([]);
 
   useEffect(() => {
@@ -21,7 +23,7 @@ export default function OrdersPage() {
   }, []);
 
   return (
-    <section className="pt-28 pb-20 px-6">
+    <section dir={dir} className="pt-28 pb-20 px-6">
       <div className="max-w-3xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -29,8 +31,8 @@ export default function OrdersPage() {
           transition={{ duration: 0.6, ease }}
           className="text-center mb-16"
         >
-          <p className="text-accent/50 text-xs tracking-[0.5em] uppercase mb-3 font-sans">Your Purchases</p>
-          <h1 className="font-serif text-4xl md:text-6xl text-primary tracking-wider">Orders</h1>
+          <p className="text-accent/50 text-xs tracking-[0.5em] uppercase mb-3 font-sans">{t('orders.label')}</p>
+          <h1 className="font-serif text-4xl md:text-6xl text-primary tracking-wider">{t('orders.title')}</h1>
         </motion.div>
 
         {orders.length === 0 ? (
@@ -45,13 +47,13 @@ export default function OrdersPage() {
               <line x1="3" y1="6" x2="21" y2="6" />
               <path d="M16 10a4 4 0 01-8 0" />
             </svg>
-            <p className="text-secondary text-lg mb-2">No orders yet</p>
+            <p className="text-secondary text-lg mb-2">{t('orders.empty')}</p>
             <p className="text-faint text-sm mb-8">Your order history will appear here after your first purchase.</p>
             <Link
               href="/shop"
               className="inline-block px-8 py-4 bg-accent text-white text-sm tracking-[0.3em] uppercase hover:bg-accent/90 transition-colors"
             >
-              Start Shopping
+              {t('orders.startShopping')}
             </Link>
           </motion.div>
         ) : (

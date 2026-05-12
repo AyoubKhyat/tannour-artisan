@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useI18n } from '@/lib/i18n';
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -83,6 +84,7 @@ function AccordionItem({ question, answer, isOpen, onToggle }: { question: strin
 }
 
 export default function FaqPage() {
+  const { t, dir } = useI18n();
   const [openItems, setOpenItems] = useState<Set<string>>(new Set());
 
   const toggle = (key: string) => {
@@ -95,7 +97,7 @@ export default function FaqPage() {
   };
 
   return (
-    <section className="pt-28 pb-20 px-6">
+    <section dir={dir} className="pt-28 pb-20 px-6">
       <div className="max-w-3xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -103,8 +105,8 @@ export default function FaqPage() {
           transition={{ duration: 0.6, ease }}
           className="text-center mb-16"
         >
-          <p className="text-accent/50 text-xs tracking-[0.5em] uppercase mb-3 font-sans">Help Center</p>
-          <h1 className="font-serif text-4xl md:text-6xl text-primary tracking-wider">FAQ & Returns</h1>
+          <p className="text-accent/50 text-xs tracking-[0.5em] uppercase mb-3 font-sans">{t('faq.label')}</p>
+          <h1 className="font-serif text-4xl md:text-6xl text-primary tracking-wider">{t('faq.title')}</h1>
           <p className="text-secondary text-sm mt-4 max-w-md mx-auto">
             Everything you need to know about your TANNOUR purchase.
           </p>
@@ -142,13 +144,13 @@ export default function FaqPage() {
           transition={{ delay: 0.5, duration: 0.5, ease }}
           className="text-center mt-16 p-8 border border-subtle bg-card"
         >
-          <p className="text-primary text-sm mb-1">Still have questions?</p>
+          <p className="text-primary text-sm mb-1">{t('faq.stillQuestions')}</p>
           <p className="text-faint text-xs mb-4">Our team responds within 24 hours.</p>
           <a
             href="mailto:contact@tannour.ma"
             className="inline-block px-8 py-3 border border-accent/30 text-accent text-xs tracking-[0.2em] uppercase hover:bg-accent hover:text-white transition-all duration-500"
           >
-            Email Us
+            {t('faq.emailUs')}
           </a>
         </motion.div>
       </div>

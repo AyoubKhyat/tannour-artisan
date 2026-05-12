@@ -2,12 +2,14 @@
 
 import { useState, useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import { useI18n } from '@/lib/i18n';
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
 type FormState = 'idle' | 'sending' | 'sent';
 
 export default function ContactPage() {
+  const { t, dir } = useI18n();
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
   const [state, setState] = useState<FormState>('idle');
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -49,7 +51,7 @@ export default function ContactPage() {
   const heroOpacity = useTransform(heroScroll, [0, 0.6], [1, 0]);
 
   return (
-    <>
+    <div dir={dir}>
       {/* Hero */}
       <section ref={heroRef} className="relative pt-32 pb-20 px-6 overflow-hidden bg-surface">
         <div className="absolute inset-0 leather-grain" />
@@ -78,7 +80,7 @@ export default function ContactPage() {
             transition={{ delay: 0.2, duration: 0.8, ease }}
             className="text-accent/50 text-xs tracking-[0.5em] uppercase mb-6 font-sans"
           >
-            Get in Touch
+            {t('contact.label')}
           </motion.p>
           <div className="overflow-hidden">
             <motion.h1
@@ -88,7 +90,7 @@ export default function ContactPage() {
               className="font-serif text-4xl sm:text-5xl md:text-7xl text-primary tracking-wider"
               style={{ transformOrigin: 'bottom' }}
             >
-              Contact
+              {t('contact.title')}
             </motion.h1>
           </div>
           <motion.div
@@ -103,7 +105,7 @@ export default function ContactPage() {
             transition={{ delay: 0.9, duration: 0.6, ease }}
             className="text-secondary text-sm max-w-lg mx-auto leading-relaxed"
           >
-            Visit our atelier in the heart of the Marrakesh medina, or send us a message — we&apos;d love to hear from you.
+            {t('contact.desc')}
           </motion.p>
         </motion.div>
       </section>
@@ -129,13 +131,13 @@ export default function ContactPage() {
                     <path d="M20 6L9 17l-5-5" />
                   </svg>
                 </div>
-                <h2 className="font-serif text-2xl text-primary mb-2">Merci!</h2>
-                <p className="text-secondary text-sm">We&apos;ll get back to you within 24 hours.</p>
+                <h2 className="font-serif text-2xl text-primary mb-2">{t('contact.merci')}</h2>
+                <p className="text-secondary text-sm">{t('contact.merciDesc')}</p>
               </motion.div>
             ) : (
               <form onSubmit={handleSubmit} noValidate className="space-y-6">
                 <div>
-                  <label htmlFor="name" className="block text-xs text-faint tracking-widest uppercase mb-2">Name *</label>
+                  <label htmlFor="name" className="block text-xs text-faint tracking-widest uppercase mb-2">{t('contact.name')} *</label>
                   <input
                     id="name"
                     type="text"
@@ -148,7 +150,7 @@ export default function ContactPage() {
                 </div>
 
                 <div>
-                  <label htmlFor="email" className="block text-xs text-faint tracking-widest uppercase mb-2">Email *</label>
+                  <label htmlFor="email" className="block text-xs text-faint tracking-widest uppercase mb-2">{t('contact.email')} *</label>
                   <input
                     id="email"
                     type="email"
@@ -161,7 +163,7 @@ export default function ContactPage() {
                 </div>
 
                 <div>
-                  <label htmlFor="subject" className="block text-xs text-faint tracking-widest uppercase mb-2">Subject</label>
+                  <label htmlFor="subject" className="block text-xs text-faint tracking-widest uppercase mb-2">{t('contact.subject')}</label>
                   <input
                     id="subject"
                     type="text"
@@ -173,7 +175,7 @@ export default function ContactPage() {
                 </div>
 
                 <div>
-                  <label htmlFor="message" className="block text-xs text-faint tracking-widest uppercase mb-2">Message *</label>
+                  <label htmlFor="message" className="block text-xs text-faint tracking-widest uppercase mb-2">{t('contact.message')} *</label>
                   <textarea
                     id="message"
                     value={form.message}
@@ -192,7 +194,7 @@ export default function ContactPage() {
                   whileTap={{ scale: 0.97 }}
                   className="w-full py-5 bg-accent text-white text-sm tracking-[0.3em] uppercase hover:bg-accent/90 transition-colors disabled:opacity-60"
                 >
-                  {state === 'sending' ? 'Sending...' : 'Send Message'}
+                  {state === 'sending' ? t('contact.sending') : t('contact.send')}
                 </motion.button>
               </form>
             )}
@@ -220,7 +222,7 @@ export default function ContactPage() {
             {/* Contact Details */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
               <div>
-                <h3 className="text-xs text-accent/60 tracking-widest uppercase mb-3">Visit Us</h3>
+                <h3 className="text-xs text-accent/60 tracking-widest uppercase mb-3">{t('contact.visitUs')}</h3>
                 <p className="text-secondary text-sm leading-relaxed">
                   Derb Dabachi, Medina<br />
                   Marrakesh 40000<br />
@@ -228,21 +230,21 @@ export default function ContactPage() {
                 </p>
               </div>
               <div>
-                <h3 className="text-xs text-accent/60 tracking-widest uppercase mb-3">Reach Out</h3>
+                <h3 className="text-xs text-accent/60 tracking-widest uppercase mb-3">{t('contact.reachOut')}</h3>
                 <div className="flex flex-col gap-2 text-sm">
                   <a href="mailto:contact@tannour.ma" className="text-secondary hover:text-accent transition-colors">contact@tannour.ma</a>
                   <a href="tel:+212524000000" className="text-secondary hover:text-accent transition-colors">+212 524 000 000</a>
                 </div>
               </div>
               <div>
-                <h3 className="text-xs text-accent/60 tracking-widest uppercase mb-3">Hours</h3>
+                <h3 className="text-xs text-accent/60 tracking-widest uppercase mb-3">{t('contact.hours')}</h3>
                 <p className="text-secondary text-sm leading-relaxed">
                   Mon – Sat: 9:00 – 19:00<br />
                   Sunday: Closed
                 </p>
               </div>
               <div>
-                <h3 className="text-xs text-accent/60 tracking-widest uppercase mb-3">Follow Us</h3>
+                <h3 className="text-xs text-accent/60 tracking-widest uppercase mb-3">{t('contact.followUs')}</h3>
                 <div className="flex gap-4">
                   {socials.map((s) => (
                     <a
@@ -264,6 +266,6 @@ export default function ContactPage() {
 
       </div>
     </section>
-    </>
+    </div>
   );
 }

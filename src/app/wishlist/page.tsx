@@ -5,15 +5,17 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useWishlist } from '@/lib/wishlist';
 import { products } from '@/lib/products';
 import ProductCard from '@/components/ProductCard';
+import { useI18n } from '@/lib/i18n';
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
 export default function WishlistPage() {
+  const { t, dir } = useI18n();
   const { items, clearWishlist } = useWishlist();
   const wishlisted = products.filter((p) => items.includes(p.id));
 
   return (
-    <section className="pt-28 pb-20 px-6">
+    <section dir={dir} className="pt-28 pb-20 px-6">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -21,18 +23,18 @@ export default function WishlistPage() {
           transition={{ duration: 0.6, ease }}
           className="text-center mb-16"
         >
-          <p className="text-accent/50 text-xs tracking-[0.5em] uppercase mb-3 font-sans">Saved Pieces</p>
-          <h1 className="font-serif text-4xl md:text-6xl text-primary tracking-wider">Wishlist</h1>
+          <p className="text-accent/50 text-xs tracking-[0.5em] uppercase mb-3 font-sans">{t('wishlist.label')}</p>
+          <h1 className="font-serif text-4xl md:text-6xl text-primary tracking-wider">{t('wishlist.title')}</h1>
           {wishlisted.length > 0 && (
             <div className="mt-6 flex items-center justify-center gap-4">
               <p className="text-secondary text-sm">
-                {wishlisted.length} piece{wishlisted.length > 1 ? 's' : ''} saved
+                {t('wishlist.saved', { count: wishlisted.length })}
               </p>
               <button
                 onClick={clearWishlist}
                 className="text-xs text-faint hover:text-accent transition-colors underline tracking-wider uppercase"
               >
-                Clear All
+                {t('wishlist.clearAll')}
               </button>
             </div>
           )}
@@ -60,13 +62,13 @@ export default function WishlistPage() {
               >
                 <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
               </svg>
-              <p className="text-secondary text-lg mb-2">Your wishlist is empty</p>
-              <p className="text-faint text-sm mb-8">Tap the heart on any piece to save it here.</p>
+              <p className="text-secondary text-lg mb-2">{t('wishlist.empty')}</p>
+              <p className="text-faint text-sm mb-8">{t('wishlist.emptyHint')}</p>
               <Link
                 href="/shop"
                 className="inline-block px-8 py-4 bg-accent text-white text-sm tracking-[0.3em] uppercase hover:bg-accent/90 transition-colors"
               >
-                Browse Collection
+                {t('wishlist.browse')}
               </Link>
             </motion.div>
           ) : (

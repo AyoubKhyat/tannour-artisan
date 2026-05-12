@@ -6,24 +6,26 @@ import { products, ProductCategory } from '@/lib/products';
 import ProductCard from '@/components/ProductCard';
 import ShopFilters from '@/components/ShopFilters';
 import Marquee from '@/components/Marquee';
+import { useI18n } from '@/lib/i18n';
 
 const ease = [0.22, 1, 0.36, 1] as const;
 const MIN_PRICE = 0;
 const MAX_PRICE = 3500;
-
-const categories: { key: ProductCategory | 'all'; label: string }[] = [
-  { key: 'all', label: 'All' },
-  { key: 'bags', label: 'Bags' },
-  { key: 'wallets', label: 'Wallets' },
-  { key: 'belts', label: 'Belts' },
-  { key: 'accessories', label: 'Accessories' },
-];
 
 export default function ShopPage() {
   const [activeCategory, setActiveCategory] = useState<ProductCategory | 'all'>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [priceRange, setPriceRange] = useState<[number, number]>([MIN_PRICE, MAX_PRICE]);
   const [sortBy, setSortBy] = useState('default');
+  const { t, dir } = useI18n();
+
+  const categories: { key: ProductCategory | 'all'; label: string }[] = [
+    { key: 'all', label: t('shop.all') },
+    { key: 'bags', label: t('shop.bags') },
+    { key: 'wallets', label: t('shop.wallets') },
+    { key: 'belts', label: t('shop.belts') },
+    { key: 'accessories', label: t('shop.accessories') },
+  ];
 
   const handleSearchChange = useCallback((q: string) => setSearchQuery(q), []);
   const handlePriceChange = useCallback((r: [number, number]) => setPriceRange(r), []);
@@ -65,7 +67,7 @@ export default function ShopPage() {
   const heroOpacity = useTransform(heroScroll, [0, 0.6], [1, 0]);
 
   return (
-    <>
+    <div dir={dir}>
       {/* Hero */}
       <section ref={heroRef} className="relative pt-32 pb-20 px-6 overflow-hidden bg-surface">
         <div className="absolute inset-0 leather-grain" />
@@ -95,7 +97,7 @@ export default function ShopPage() {
               transition={{ delay: 0.15, duration: 0.7, ease }}
               className="text-accent/50 text-xs tracking-[0.5em] uppercase mb-4 font-sans"
             >
-              Collection
+              {t('shop.label')}
             </motion.p>
             <div className="overflow-hidden">
               <motion.h1
@@ -105,7 +107,7 @@ export default function ShopPage() {
                 className="font-serif text-5xl md:text-7xl text-primary tracking-wider"
                 style={{ transformOrigin: 'bottom' }}
               >
-                The Shop
+                {t('shop.title')}
               </motion.h1>
             </div>
             <motion.div
@@ -120,7 +122,7 @@ export default function ShopPage() {
               transition={{ delay: 0.7, duration: 0.6, ease }}
               className="text-secondary text-sm tracking-[0.2em] uppercase font-sans"
             >
-              Handcrafted Moroccan Leather Goods
+              {t('shop.subtitle')}
             </motion.p>
           </div>
         </motion.div>
@@ -174,7 +176,7 @@ export default function ShopPage() {
             transition={{ delay: 0.6, duration: 0.4 }}
             className="text-faint text-xs tracking-wider mb-6"
           >
-            Showing {filtered.length} of {products.length} pieces
+            {t('shop.showing', { count: filtered.length, total: products.length })}
           </motion.p>
 
           <div aria-live="polite" className="sr-only">
@@ -207,16 +209,16 @@ export default function ShopPage() {
             >
               {searchQuery.trim() ? (
                 <>
-                  <p className="text-faint text-sm tracking-widest uppercase mb-4">No pieces match &ldquo;{searchQuery}&rdquo;</p>
-                  <button onClick={() => { setSearchQuery(''); }} className="text-xs text-accent underline hover:no-underline">Clear search</button>
+                  <p className="text-faint text-sm tracking-widest uppercase mb-4">{t('shop.noMatch')} &ldquo;{searchQuery}&rdquo;</p>
+                  <button onClick={() => { setSearchQuery(''); }} className="text-xs text-accent underline hover:no-underline">{t('shop.clearSearch')}</button>
                 </>
               ) : hasFilters ? (
                 <>
-                  <p className="text-faint text-sm tracking-widest uppercase mb-4">No pieces in this price range</p>
-                  <button onClick={() => { setPriceRange([MIN_PRICE, MAX_PRICE]); setSortBy('default'); }} className="text-xs text-accent underline hover:no-underline">Reset filters</button>
+                  <p className="text-faint text-sm tracking-widest uppercase mb-4">{t('shop.noRange')}</p>
+                  <button onClick={() => { setPriceRange([MIN_PRICE, MAX_PRICE]); setSortBy('default'); }} className="text-xs text-accent underline hover:no-underline">{t('shop.resetFilters')}</button>
                 </>
               ) : (
-                <p className="text-faint text-sm tracking-widest uppercase">No products in this category</p>
+                <p className="text-faint text-sm tracking-widest uppercase">{t('shop.noCategory')}</p>
               )}
             </motion.div>
           )}
@@ -224,6 +226,6 @@ export default function ShopPage() {
       </section>
 
       <Marquee />
-    </>
+    </div>
   );
 }

@@ -7,6 +7,7 @@ import { Product } from '@/lib/products';
 import { useCart } from '@/lib/cart';
 import { useToast } from '@/lib/toast';
 import { useQuickView } from '@/lib/quickview';
+import { useI18n } from '@/lib/i18n';
 import { getAverageRating, getReviewCount } from '@/lib/reviews';
 import WishlistButton from '@/components/WishlistButton';
 import StarRating from '@/components/StarRating';
@@ -18,6 +19,7 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
   const { addItem } = useCart();
   const { show } = useToast();
   const { open: openQuickView } = useQuickView();
+  const { t } = useI18n();
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!cardRef.current) return;
@@ -29,7 +31,7 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
 
   const handleAdd = () => {
     addItem(product, product.colors[0].name, product.sizes[0]);
-    show(`${product.nameFr} added to bag`);
+    show(`${product.nameFr} ${t('product.addedToBag')}`);
   };
 
   const categoryIcon: Record<string, string> = { bags: '👜', wallets: '💳', belts: '〰️', accessories: '✦' };
@@ -53,20 +55,19 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
             aria-hidden="true"
           />
 
-          <Link href={`/product/${product.id}`} aria-label={`View ${product.nameFr}`}>
+          <Link href={`/product/${product.id}`} aria-label={`${t('product.viewDetails')} - ${product.nameFr}`}>
             <div className="aspect-[3/4] bg-surface-alt flex items-center justify-center relative overflow-hidden">
               <span className="text-6xl opacity-20 group-hover:opacity-35 transition-opacity group-hover:scale-110 transform duration-500" aria-hidden="true">{categoryIcon[product.category]}</span>
               <div className="absolute top-3 right-3 text-xs text-accent/40 tracking-widest uppercase font-sans">{product.category}</div>
               <div className="absolute top-3 left-3 z-20">
                 <WishlistButton productId={product.id} productName={product.nameFr} size="sm" />
               </div>
-              {/* Quick view button */}
               <button
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); openQuickView(product); }}
                 className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 px-4 py-2 bg-card/90 backdrop-blur-sm border border-subtle text-xs tracking-[0.15em] uppercase text-secondary hover:text-accent hover:border-accent transition-all opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 duration-300"
-                aria-label={`Quick view ${product.nameFr}`}
+                aria-label={`${t('product.quickView')} ${product.nameFr}`}
               >
-                Quick View
+                {t('product.quickView')}
               </button>
             </div>
           </Link>
@@ -82,7 +83,7 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
             </div>
             <div className="flex items-center justify-between mt-3">
               <span className="text-accent font-serif text-lg">{product.price.toLocaleString()} <span className="text-xs opacity-50">MAD</span></span>
-              <button onClick={handleAdd} className="px-4 py-2 text-xs tracking-[0.15em] uppercase border border-subtle-strong text-accent/70 hover:bg-accent hover:text-white transition-all duration-300" aria-label={`Add ${product.nameFr} to bag`}>Add</button>
+              <button onClick={handleAdd} className="px-4 py-2 text-xs tracking-[0.15em] uppercase border border-subtle-strong text-accent/70 hover:bg-accent hover:text-white transition-all duration-300" aria-label={`${t('product.add')} ${product.nameFr}`}>{t('product.add')}</button>
             </div>
             <div className="flex gap-1.5 mt-3" aria-hidden="true">
               {product.colors.map((color) => (

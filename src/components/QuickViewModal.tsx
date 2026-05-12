@@ -7,10 +7,12 @@ import { useQuickView } from '@/lib/quickview';
 import { useCart } from '@/lib/cart';
 import { useToast } from '@/lib/toast';
 import WishlistButton from '@/components/WishlistButton';
+import { useI18n } from '@/lib/i18n';
 
 const categoryIcon: Record<string, string> = { bags: '👜', wallets: '💳', belts: '〰️', accessories: '✦' };
 
 export default function QuickViewModal() {
+  const { t, dir } = useI18n();
   const { product, close } = useQuickView();
   const { addItem } = useCart();
   const { show } = useToast();
@@ -60,6 +62,7 @@ export default function QuickViewModal() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.92, y: 40 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+            dir={dir}
             className="fixed inset-4 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-[720px] md:max-h-[85vh] bg-card border border-subtle z-[75] overflow-y-auto shadow-2xl"
             role="dialog"
             aria-modal="true"
@@ -96,7 +99,7 @@ export default function QuickViewModal() {
                   {/* Colors */}
                   <div className="mt-6">
                     <p className="text-xs text-faint tracking-widest uppercase mb-2">
-                      Leather: {product.colors[selectedColor].name}
+                      {t('product.leather')}: {product.colors[selectedColor].name}
                     </p>
                     <div className="flex gap-2">
                       {product.colors.map((color, i) => (
@@ -116,7 +119,7 @@ export default function QuickViewModal() {
 
                   {/* Sizes */}
                   <div className="mt-4">
-                    <p className="text-xs text-faint tracking-widest uppercase mb-2">Size</p>
+                    <p className="text-xs text-faint tracking-widest uppercase mb-2">{t('product.size')}</p>
                     <div className="flex gap-2 flex-wrap">
                       {product.sizes.map((size, i) => (
                         <button
@@ -142,7 +145,7 @@ export default function QuickViewModal() {
                     onClick={handleAdd}
                     className="flex-1 py-3 bg-accent text-white text-sm tracking-[0.2em] uppercase hover:bg-accent/90 transition-colors"
                   >
-                    Add to Bag
+                    {t('product.addToBag')}
                   </button>
                   <WishlistButton
                     productId={product.id}
@@ -157,7 +160,7 @@ export default function QuickViewModal() {
                   onClick={close}
                   className="mt-3 text-center text-xs text-accent/60 tracking-widest uppercase hover:text-accent transition-colors"
                 >
-                  View Full Details →
+                  {t('product.viewDetails')} →
                 </Link>
               </div>
             </div>

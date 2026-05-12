@@ -2,9 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useI18n } from '@/lib/i18n';
 
 export default function CookieConsent() {
   const [visible, setVisible] = useState(false);
+  const { t, dir } = useI18n();
 
   useEffect(() => {
     const consent = localStorage.getItem('tannour-cookies');
@@ -31,6 +33,7 @@ export default function CookieConsent() {
           style={{ backgroundColor: 'var(--nav-bg)' }}
           role="dialog"
           aria-label="Cookie consent"
+          dir={dir}
         >
           <div className="max-w-5xl mx-auto px-6 py-5 flex flex-col sm:flex-row items-start sm:items-center gap-4">
             <div className="flex items-start gap-3 flex-1">
@@ -43,8 +46,8 @@ export default function CookieConsent() {
                 <circle cx="13" cy="11" r="1" fill="currentColor" />
               </svg>
               <div>
-                <p className="text-primary text-sm">We use cookies to enhance your experience.</p>
-                <p className="text-faint text-xs mt-0.5">Analytics and personalization cookies help us improve TANNOUR for you.</p>
+                <p className="text-primary text-sm">{t('cookie.message')}</p>
+                <p className="text-faint text-xs mt-0.5">{t('cookie.detail')}</p>
               </div>
             </div>
             <div className="flex gap-3 shrink-0">
@@ -52,13 +55,13 @@ export default function CookieConsent() {
                 onClick={() => respond('declined')}
                 className="px-5 py-2.5 text-xs tracking-[0.15em] uppercase text-secondary border border-subtle hover:border-accent hover:text-accent transition-colors"
               >
-                Decline
+                {t('cookie.decline')}
               </button>
               <button
                 onClick={() => respond('accepted')}
                 className="px-5 py-2.5 text-xs tracking-[0.15em] uppercase bg-accent text-white hover:bg-accent/90 transition-colors"
               >
-                Accept
+                {t('cookie.accept')}
               </button>
             </div>
           </div>
