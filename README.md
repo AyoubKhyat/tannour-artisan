@@ -1,36 +1,79 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# TANNOUR — Luxury Handcrafted Leather Goods
 
-## Getting Started
+Demo e-commerce store for a Moroccan artisan leather brand — 3D product viewer, multi-language interface, wishlist, cart, and an admin dashboard. All client-side state (localStorage), no backend required.
 
-First, run the development server:
+**Live:** https://tannour.vercel.app/
+
+## Pages
+
+- `/` — Homepage: 3D hero, featured products, craft story, lookbook
+- `/shop` — Product grid with category/price/search filters
+- `/product/[id]` — Product detail with 3D viewer, color/size selectors, reviews
+- `/craft` — Heritage storytelling page
+- `/wishlist` — Saved products
+- `/checkout` — Cart summary + mock order placement
+- `/orders` — Order history (localStorage)
+- `/faq` — Animated accordion
+- `/contact` — Form + OpenStreetMap + social links
+- `/admin` — Dashboard with revenue/orders charts, order table, inventory grid
+
+## Features
+
+- **Multi-language** — English, French, Arabic (RTL). Language switcher in navbar, persists to localStorage
+- **3D product viewer** — Three.js via `@react-three/fiber` + `drei`
+- **Dark / light theme** toggle with persistent preference
+- **Cart + wishlist** — full state managed via React Context + localStorage
+- **Toast notifications, quick-view modal, star ratings, recently viewed**
+- **Social proof toasts, dismissible announcement bar, cookie consent**
+- **Admin dashboard** with Recharts (revenue area chart, orders bar chart, inventory table)
+- **SEO** — sitemap.ts, robots.ts, Organization + Product JSON-LD
+
+## Tech stack
+
+- **Framework:** Next.js 14 (App Router)
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS with dark mode class strategy
+- **3D:** Three.js (`@react-three/fiber` 8, `@react-three/drei` 9)
+- **Animation:** Framer Motion
+- **Charts:** Recharts (admin only)
+- **Fonts:** Cormorant Garamond (serif) + Inter (sans)
+- **Hosting:** Vercel
+
+## Getting started
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:4000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+tannour-artisan/
+├── src/app/
+│   ├── shop/          # product listing
+│   ├── product/[id]/  # product detail with 3D viewer
+│   ├── checkout/      # cart + mock checkout
+│   ├── orders/
+│   ├── wishlist/
+│   ├── craft/         # heritage story
+│   ├── contact/
+│   ├── faq/
+│   ├── admin/         # dashboard with charts
+│   ├── layout.tsx
+│   └── page.tsx
+├── src/components/
+│   └── admin/         # chart components
+├── src/lib/
+│   ├── products.ts    # 12 products defined here
+│   └── translations/  # en.ts, fr.ts, ar.ts
+└── public/
+```
 
-## Learn More
+## About
 
-To learn more about Next.js, take a look at the following resources:
+Built by [Ayoub Khyat](https://github.com/AyoubKhyat) — full-stack developer, Marrakech.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+For custom e-commerce work, 3D product visualization, or admin dashboards, contact via [Ibda3 Digital](https://ibda3-digital.vercel.app/) or [Fiverr](https://www.fiverr.com/ayoubkhyat).
